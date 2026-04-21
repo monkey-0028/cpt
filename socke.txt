@@ -1,0 +1,64 @@
+python code -- TCP
+# server
+
+import socket
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind(("localhost", 1234))
+s.listen(5)
+
+conn, addr = s.accept()
+print("connected to:", addr)
+
+data = conn.recv(1024).decode()
+print("client said:", data)
+
+reply = "hello".encode()
+conn.send(reply)
+
+conn.close()
+
+# client 
+import socket
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+s.connect(("localhost", 12345))
+
+s.send("this is data".encode())
+
+reply = s.recv(1024).decode()
+print(reply)
+
+s.close()
+
+
+python code -- UDP
+
+# client :
+import socket
+
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+data = "hi server".encode()
+s.sendto(data, ("localhost", 12345))
+
+reply, addr = s.recvfrom(1024)
+print(reply.decode())
+
+s.close()
+
+# server : 
+import socket 
+
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+s.bind(("localhost", 12345))
+
+data, addr = s.recvfrom(1024)
+print(data.decode())
+
+s.sendto("hi".encode(), addr)
+
+s.close()
+ 
