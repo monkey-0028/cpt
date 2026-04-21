@@ -1,0 +1,69 @@
+-- setting up dhcp using router
+
+# setting ip of each interface
+	enable
+	configure terminal
+
+	interface g0/0
+	ip address 192.168.2.1 255.255.255.0
+	no shutdown
+
+#exclude dhcp address
+	ip dhcp excluded-address 192.168.2.1
+
+#create dhcp
+ip dhcp pool G0_POOL
+network 192.168.2.0 255.255.255.0
+default-router 192.168.2.1
+dns-server 8.8.8.8
+
+DONE..
+
+-- creating vlan
+#crating vlan profile
+enable
+configure terminal
+
+vlan 10
+name N1
+
+vlan 20
+name N2
+
+#assign port to vlan
+interface fa0/1
+switchport mode access
+switchport access vlan 10
+
+## --> connected the fa0/1 to vlan 10
+
+
+-- communication between vlan 
+create v lan and assign to port
+
+switch : interface fa0/24
+	switchport mode trunk
+
+router : 
+enable
+configure terminal
+
+interface g0/0
+no shutdown
+
+interface g0/0.10
+encapsulation dot1Q 10
+ip address 192.168.10.1 255.255.255.0
+
+interface g0/0.20
+encapsulation dot1Q 20
+ip address 192.168.20.1 255.255.255.0
+
+# set ip's to the pc1 and pc2
+PC1 (VLAN 10)
+IP: 192.168.10.2
+Gateway: 192.168.10.1
+PC2 (VLAN 20)
+IP: 192.168.20.2
+Gateway: 192.168.20.1
+
